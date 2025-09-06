@@ -1,0 +1,52 @@
+.detector-container {
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+}
+
+.video-feed {
+  width: 20rem;          /* smaller width */
+  aspect-ratio: 16/9;    /* keep 16:9 ratio */
+  border-radius: 1rem;   /* rounded corners */
+  border: 2px solid #333;
+  object-fit: cover;    /* cover the area */
+}
+
+.button-group {
+  margin-top: 15px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.start-btn {
+  background-color: #4caf50;
+}
+
+.start-btn:hover:not(.disabled) {
+  background-color: #45a049;
+}
+
+.stop-btn {
+  background-color: #f44336;
+}
+
+.stop-btn:hover {
+  background-color: #d32f2f;
+}
+
+.disabled {
+  background-color: gray !important;
+  cursor: not-allowed;
+}
+
+

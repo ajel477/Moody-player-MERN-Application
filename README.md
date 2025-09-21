@@ -33,10 +33,15 @@ A web application that detects user's mood through facial expressions and recomm
 - MongoDB
 - Git
 
+Connection frontend with backend
+ ```bash
+ npm i cors
+ ```
+
 ### Backend Setup
 1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone <[repository-url](https://github.com/ajel477/Moody-player-MERN-Application.git)>
 cd Moody-Player/Backend
 ```
 
@@ -53,7 +58,7 @@ PORT=3000
 
 4. Start the server
 ```bash
-npm start
+node server.js
 ```
 
 The backend server will start running on http://localhost:3000
@@ -105,24 +110,6 @@ Moody-Player/
 3. Based on the detected mood (Happy, Sad, Angry, or Neutral), the application fetches relevant songs from the database
 4. Play/pause songs using the intuitive audio player interface
 
-## API Endpoints 🔌
 
-- `GET /songs?mood={mood}` - Get songs based on mood
-- Additional endpoints documentation coming soon...
 
-## Contributing 🤝
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License 📝
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments 🙏
-
-- face-api.js for facial expression detection
-- All contributors who have helped with the project

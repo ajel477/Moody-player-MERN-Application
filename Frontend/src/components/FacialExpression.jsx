@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import * as faceapi from "face-api.js";
 import "./FacialExpression.css";
+import axios from "axios";
 
-export default function MoodDetector() {
+export default function FacialExpression({ setSongs }) {
   const videoRef = useRef(null);
   const [mood, setMood] = useState("Loading models...");
   const [modelsLoaded, setModelsLoaded] = useState(false);
   const [detecting, setDetecting] = useState(false);
-  const intervalRef = useRef(null);
 
   // Load models once
   useEffect(() => {
@@ -33,19 +33,19 @@ export default function MoodDetector() {
       .catch((err) => console.error("Camera error:", err));
   }, [modelsLoaded]);
 
-  // Start detection
-  const startDetection = () => {
+  // Modified startDetection to detect once
+  const startDetection = async () => {
     if (!modelsLoaded) {
       alert("Models not loaded yet!");
       return;
     }
 
-    if (detecting) return; // prevent multiple intervals
+    if (detecting) return;
 
     setMood("Detecting...");
     setDetecting(true);
 
-    intervalRef.current = setInterval(async () => {
+    try {
       if (videoRef.current) {
         const detections = await faceapi
           .detectSingleFace(
@@ -55,55 +55,49 @@ export default function MoodDetector() {
           .withFaceExpressions();
 
         if (detections && detections.expressions) {
-          const { happy, sad, surprised, neutral } = detections.expressions;
+  const allowedMoods = ["angry", "neutral", "happy", "sad"];
+  const filtered = Object.fromEntries(
+    Object.entries(detections.expressions).filter(([key]) =>
+      allowedMoods.includes(key)
+    )
+  );
 
-          // log scores
-          
-
-          // pick best mood
-          const detectedMood = Object.keys(detections.expressions).reduce(
-            (a, b) =>
-              detections.expressions[a] > detections.expressions[b] ? a : b
-          );
+  const detectedMood = Object.keys(filtered).reduce(
+    (a, b) => (filtered[a] > filtered[b] ? a : b)
+  );
           setMood(detectedMood);
-          console.log(detectedMood);
+          console.log("Detected Mood:", detectedMood);
+           axios.get(`http://localhost:3000/songs?mood=${detectedMood}`)
+      .then((response) => {
+        console.log(response.data);
+        setSongs(response.data.song);
+        
+      })
         } else {
           setMood("No face detected");
+          console.log("No face detected");
         }
       }
-    }, 1000);
-  };
-
-  // Stop detection
-  const stopDetection = () => {
-    clearInterval(intervalRef.current);
-    setDetecting(false);
-    setMood("Detection stopped");
+    } catch (error) {
+      console.error("Detection error:", error);
+      setMood("Detection failed");
+    } finally {
+      setDetecting(false);
+    }
   };
 
   return (
     <div className="detector-container">
-
       <video ref={videoRef} autoPlay muted className="video-feed" />
-
       <div className="button-group">
-        {!detecting ? (
-          <button
-            className={`btn start-btn ${!modelsLoaded ? "disabled" : ""}`}
-            onClick={startDetection}
-            disabled={!modelsLoaded}
-          >
-            Start Detection
-          </button>
-        ) : (
-          <button className="btn stop-btn" onClick={stopDetection}>
-            Stop Detection
-          </button>
-        )}
+        <button
+          className={`btn start-btn ${!modelsLoaded ? "disabled" : ""}`}
+          onClick={startDetection}
+          disabled={!modelsLoaded || detecting}
+        >
+          Detect Mood
+        </button>
       </div>
-
-      
     </div>
   );
 }
-

@@ -1,0 +1,18 @@
+.Mood-songs {
+    width: 100%;
+    padding: 4rem;
+    color: white;
+    font-family: 'Arial', sans-serif;
+}
+
+.Mood-songs h2 {
+    margin-bottom: 1rem;
+}
+
+.Mood-songs .Song {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1rem 0;
+}
